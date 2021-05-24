@@ -23,7 +23,7 @@ conda env update --name marif --file environment.yml
 
 ## Training
 ## Quick start please check 
-For a quick walkthrough on how to run `MARIF model`, take a look at the [run.py](run.py).
+For a quick walkthrough on how to run `MARIF model`, take a look at the [deepTrans/run.py](run.py).
 For train the model from scratch
 ```bash
 python run.py
@@ -44,18 +44,19 @@ python eval.py --model-file mymodel.pth --benchmark imagenet
 ```
  -->
 
-We use six datasets for evaluation: Ml1M and Children's book datasets are chosen as source domain datasets, as they have high densities, thus containing more information.
-We show the evaluation result on ML1M --\> ML100K as an example with the beta = 0.45 
+We use three common datasets in CTR task for evaluation, whereas not all users/items are involved in training because of the we conduct flexible up-down sampling strategy.
 <p align="center">
-<img src="docs/mldatasets.png" height=400>
+<img src="docs/table1.jpg" height=400>
 </p>
-
+<p align="center">
+<img src="docs/table2.jpg" height=400>
+</p>
 
 ## Results
 Our model achieves the following performance on different datasets comparing with different models:
 
 <p align="center">
-<img src="docs/results.png" height=277>
+<img src="docs/results.jpg" height=277>
 </p>
 
 <!-- Our model achieves the following performance on :
