@@ -26,6 +26,7 @@ conda env update --name marif --file environment.yml
 For a quick walkthrough on how to run `MARIF model`, take a look at the [run.py](deepTrans/run.py).
 For train the model from scratch
 ```bash
+cd deepTrans
 python run.py
 ```
 <!-- 
