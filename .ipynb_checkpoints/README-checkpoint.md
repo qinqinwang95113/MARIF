@@ -46,17 +46,17 @@ python eval.py --model-file mymodel.pth --benchmark imagenet
 
 We use three common datasets in CTR task for evaluation, whereas not all users/items are involved in training because of the we conduct flexible up-down sampling strategy.
 <p align="center">
-<img src="docs/table1.jpg" height=400>
+<img src="img/table1.jpg" height=400>
 </p>
 <p align="center">
-<img src="docs/table2.jpg" height=400>
+<img src="img/table2.jpg" height=400>
 </p>
 
 ## Results
 Our model achieves the following performance on different datasets comparing with different models:
 
 <p align="center">
-<img src="docs/results.jpg" height=277>
+<img src="img/results.jpg" height=277>
 </p>
 
 <!-- Our model achieves the following performance on :
