@@ -14,7 +14,7 @@ Then run the following commands to create a conda environment named `marif` with
 
 ```bash
 git clone git@github.com:qinqinwang95113/MARIF.git
-cd auto-rec
+cd MARIF
 conda create -n marif python=3.7
 conda env update --name marif --file environment.yml
 ```
