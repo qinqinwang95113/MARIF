@@ -7,7 +7,6 @@ import torch as t
 from tqdm import tqdm
 from torch.utils.data import DataLoader, Dataset
 from collections import namedtuple
-# from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 from collections import Counter
 
 
@@ -44,21 +43,6 @@ class ML1M(DatasetLoader):
         genre_df = genre_df.drop(["movie_title", "movie_genre"], axis=1)
         merged_df = ratings_df.merge(genre_df, on="item_id")
         return merged_df
-
-
-class AmazonE(DatasetLoader):
-    def __init__(self, data_dir):
-        self.fpath = os.path.join(data_dir, "ratings_Electronics.csv")
-
-    def load(self):
-        df = pd.read_csv(
-            self.fpath,
-            sep=",",
-            engine="python",
-            names=["user_id", "item_id", "rating", "timestamp"]
-        )
-        return df
-
 
 class ML20M(DatasetLoader):
     def __init__(self, data_dir):
@@ -381,56 +365,6 @@ class AllFeaturePair_Constant_id(Dataset):
             user_seq_ids), t.LongTensor(gender), t.LongTensor(age), t.LongTensor(occupation), t.LongTensor(
             zipCode), t.LongTensor(genres), t.LongTensor(label)
 
-
-# class AllFeaturePair_Constant_id_Sample(Dataset):
-#     def __init__(self, raw_df, sequence_len):
-#         self.raw_df = raw_df
-#         self.seq_len = sequence_len
-
-#     def __len__(self):
-#         return len(self.raw_df)
-
-#     def __getitem__(self, idx):
-# #         idx = np.random.randint(len(self.pair))
-#         # df: user id, item id, rating, timestamp, label
-#         uid = self.raw_df.iloc[idx, 0]
-#         iid = self.raw_df.iloc[idx, 1]
-#         label = [self.raw_df.iloc[idx, -1]]
-
-#         gender = [self.raw_df.iloc[idx, 4]]
-#         age = [self.raw_df.iloc[idx, 5]]
-#         occupation = [self.raw_df.iloc[idx, 6]]
-#         zipCode = [self.raw_df.iloc[idx, 7]]
-#         genres = self.raw_df.iloc[idx, 9:-1]
-
-
-#         u_seq_ratings, item_seq_ids = self.up_down_sampling(self.raw_df[self.raw_df["user_id"] == uid], "item_id")
-#         i_seq_ratings, user_seq_ids = self.up_down_sampling(self.raw_df[self.raw_df["item_id"] == iid], "user_id")
-
-
-#         return t.LongTensor(u_seq_ratings), t.LongTensor(item_seq_ids), t.LongTensor(i_seq_ratings), t.LongTensor(user_seq_ids), t.LongTensor(gender), t.LongTensor(age), t.LongTensor(occupation), t.LongTensor(zipCode), t.LongTensor(genres), t.LongTensor(label)
-
-#     def up_down_sampling(self, pdf, unaspect):
-#         tem_list_rating = []
-#         tem_list_id = []
-#         rating_list = pdf["rating"].values.tolist()
-#         count = Counter(rating_list)
-#         key_list = list(count.keys())
-#         value_list = list(count.values())
-#         sum_val = sum(value_list)
-#         for i in range(len(key_list) -1):
-#             rp_times = int(self.seq_len * value_list[i] / sum_val)
-#             tem_list_rating.extend(np.repeat(key_list[i], rp_times).tolist())
-#             tem_list_id.extend([np.random.choice(pdf[pdf["rating"] == key_list[i]][unaspect].values) for _ in range(rp_times)])
-#         left_num = self.seq_len - len(tem_list_rating)
-#         tem_list_rating.extend(np.repeat(key_list[-1], left_num).tolist())
-#         tem_list_id.extend([np.random.choice(pdf[pdf["rating"] == key_list[-1]][unaspect].values) for _ in range(left_num)])
-
-#         ri_list = list(zip(tem_list_rating, tem_list_id))
-#         np.random.shuffle(ri_list)
-#         list_rating = [i[0] for i in ri_list]
-#         list_id = [i[1] for i in ri_list]
-#         return list_rating, list_id
 
 
 class AllFeaturePair_Constant_id_Sample(Dataset):

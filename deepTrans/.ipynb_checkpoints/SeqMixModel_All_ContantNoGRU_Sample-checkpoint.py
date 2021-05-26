@@ -18,45 +18,6 @@ print(f"=>using {device}")
 
 # device = t.device("cpu")
 
-# This is gauc score which used in DIN model
-def calc_auc(preds, labels):
-    """Summary
-    Args:
-        raw_arr (TYPE): Description
-    Returns:
-        TYPE: Description
-    """
-    raw_arr = []
-    for p, t in zip(preds, labels):
-        raw_arr.append([p, t])
-    arr = sorted(raw_arr, key=lambda d: d[0], reverse=True)
-    pos, neg = 0., 0.
-    for record in arr:
-        if record[1] == 1.:
-            pos += 1
-        else:
-            neg += 1
-
-    fp, tp = 0., 0.
-    xy_arr = []
-    for record in arr:
-        if record[1] == 1.:
-            tp += 1
-        else:
-            fp += 1
-        xy_arr.append([fp / neg, tp / pos])
-
-    auc = 0.
-    prev_x = 0.
-    prev_y = 0.
-    for x, y in xy_arr:
-        if x != prev_x:
-            auc += ((x - prev_x) * (y + prev_y) / 2.)
-            prev_x = x
-            prev_y = y
-
-    return auc
-
 
 class Feature_Extractor(nn.Module):
     def __init__(self, input_size, num_ratings, hidden_size, num_layers, num_ui):
@@ -68,10 +29,6 @@ class Feature_Extractor(nn.Module):
         self.ratings_emd = nn.Parameter(t.empty(num_ratings + 1, input_size))
         nn.init.xavier_normal_(self.ratings_emd)
         nn.init.xavier_normal_(self.id_emd)
-        #         self.ratings_emd = nn.Embedding(num_ratings + 1, input_size)
-        #         self.lstm = nn.LSTM(input_size = input_size, hidden_size = hidden_size, batch_first = True, num_layers = num_layers, bidirectional = False)
-        # the input is the concatenation of id emd and rating sequence emd
-        #         self.gru = nn.GRU(input_size = input_size * 2, hidden_size = hidden_size, batch_first = True, num_layers = num_layers, bidirectional = False)
         self.projection_layer = nn.Sequential(
             nn.Linear(input_size * 2, hidden_size),
             nn.ReLU(),
@@ -81,9 +38,6 @@ class Feature_Extractor(nn.Module):
         x = self.ratings_emd[x, :]
         x_ids = self.id_emd[ids, :]
         x_all = t.cat((x, x_ids), dim=2)
-        #         h0 = t.zeros(self.num_layers * 1, x.size(0), self.hidden_size).to(device)
-        #         c0 = t.zeros(self.num_layers * 1, x.size(0), self.hidden_size).to(device)
-        #         out, _ = self.gru(x_all, h0)
         out = self.projection_layer(x_all)
         out = out.mean(axis=1)
         return out
@@ -381,8 +335,6 @@ class AggSeqModel_pair():
                 pred = self.model.fc(x_ui)
                 pred = pred.flatten()
                 pred = t.sigmoid(pred)
-            #                 pred = t.mul(user_emd, item_emd).sum(dim = 1)
-            #                 pred = t.sigmoid(pred)
             self.model.train()
 
             pred_list.extend(pred.detach().cpu().numpy())
